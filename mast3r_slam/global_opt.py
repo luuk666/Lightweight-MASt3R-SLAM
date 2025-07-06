@@ -8,6 +8,8 @@ from mast3r_slam.geometry import (
 from mast3r_slam.mast3r_utils import mast3r_match_symmetric
 import mast3r_slam_backends
 
+from mast3r_slam.profiler import profiler
+
 
 class FactorGraph:
     def __init__(self, model, frames: SharedKeyframes, K=None, device="cuda"):
@@ -119,95 +121,99 @@ class FactorGraph:
         return Xs, T_WCs, Cs
 
     def solve_GN_rays(self):
-        pin = self.cfg["pin"]
-        unique_kf_idx = self.get_unique_kf_idx()
-        n_unique_kf = unique_kf_idx.numel()
-        if n_unique_kf <= pin:
-            return
+        with profiler.timer('ba_rays'):
+            pin = self.cfg["pin"]
+            unique_kf_idx = self.get_unique_kf_idx()
+            n_unique_kf = unique_kf_idx.numel()
+            if n_unique_kf <= pin:
+                return
 
-        Xs, T_WCs, Cs = self.get_poses_points(unique_kf_idx)
+            Xs, T_WCs, Cs = self.get_poses_points(unique_kf_idx)
 
-        ii, jj, idx_ii2jj, valid_match, Q_ii2jj = self.prep_two_way_edges()
+            ii, jj, idx_ii2jj, valid_match, Q_ii2jj = self.prep_two_way_edges()
 
-        C_thresh = self.cfg["C_conf"]
-        Q_thresh = self.cfg["Q_conf"]
-        max_iter = self.cfg["max_iters"]
-        sigma_ray = self.cfg["sigma_ray"]
-        sigma_dist = self.cfg["sigma_dist"]
-        delta_thresh = self.cfg["delta_norm"]
+            C_thresh = self.cfg["C_conf"]
+            Q_thresh = self.cfg["Q_conf"]
+            max_iter = self.cfg["max_iters"]
+            sigma_ray = self.cfg["sigma_ray"]
+            sigma_dist = self.cfg["sigma_dist"]
+            delta_thresh = self.cfg["delta_norm"]
 
-        pose_data = T_WCs.data[:, 0, :]
-        mast3r_slam_backends.gauss_newton_rays(
-            pose_data,
-            Xs,
-            Cs,
-            ii,
-            jj,
-            idx_ii2jj,
-            valid_match,
-            Q_ii2jj,
-            sigma_ray,
-            sigma_dist,
-            C_thresh,
-            Q_thresh,
-            max_iter,
-            delta_thresh,
-        )
+            pose_data = T_WCs.data[:, 0, :]
+            mast3r_slam_backends.gauss_newton_rays(
+                pose_data,
+                Xs,
+                Cs,
+                ii,
+                jj,
+                idx_ii2jj,
+                valid_match,
+                Q_ii2jj,
+                sigma_ray,
+                sigma_dist,
+                C_thresh,
+                Q_thresh,
+                max_iter,
+                delta_thresh,
+            )
 
-        # Update the keyframe T_WC
-        self.frames.update_T_WCs(T_WCs[pin:], unique_kf_idx[pin:])
+            # Update the keyframe T_WC
+            self.frames.update_T_WCs(T_WCs[pin:], unique_kf_idx[pin:])
 
     def solve_GN_calib(self):
-        K = self.K
-        pin = self.cfg["pin"]
-        unique_kf_idx = self.get_unique_kf_idx()
-        n_unique_kf = unique_kf_idx.numel()
-        if n_unique_kf <= pin:
-            return
+        with profiler.timer('ba_calib'):
+            K = self.K
+            pin = self.cfg["pin"]
+            unique_kf_idx = self.get_unique_kf_idx()
+            #print("unique_kf =", unique_kf_idx.numel(), "pin =", pin)
 
-        Xs, T_WCs, Cs = self.get_poses_points(unique_kf_idx)
+            n_unique_kf = unique_kf_idx.numel()
+            if n_unique_kf <= pin:
+                return
 
-        # Constrain points to ray
-        img_size = self.frames[0].img.shape[-2:]
-        Xs = constrain_points_to_ray(img_size, Xs, K)
+            Xs, T_WCs, Cs = self.get_poses_points(unique_kf_idx)
 
-        ii, jj, idx_ii2jj, valid_match, Q_ii2jj = self.prep_two_way_edges()
+            # Constrain points to ray
+            img_size = self.frames[0].img.shape[-2:]
+            Xs = constrain_points_to_ray(img_size, Xs, K)
 
-        C_thresh = self.cfg["C_conf"]
-        Q_thresh = self.cfg["Q_conf"]
-        pixel_border = self.cfg["pixel_border"]
-        z_eps = self.cfg["depth_eps"]
-        max_iter = self.cfg["max_iters"]
-        sigma_pixel = self.cfg["sigma_pixel"]
-        sigma_depth = self.cfg["sigma_depth"]
-        delta_thresh = self.cfg["delta_norm"]
+            ii, jj, idx_ii2jj, valid_match, Q_ii2jj = self.prep_two_way_edges()
 
-        pose_data = T_WCs.data[:, 0, :]
+            C_thresh = self.cfg["C_conf"]
+            Q_thresh = self.cfg["Q_conf"]
+            pixel_border = self.cfg["pixel_border"]
+            z_eps = self.cfg["depth_eps"]
+            max_iter = self.cfg["max_iters"]
+            sigma_pixel = self.cfg["sigma_pixel"]
+            sigma_depth = self.cfg["sigma_depth"]
+            delta_thresh = self.cfg["delta_norm"]
 
-        img_size = self.frames[0].img.shape[-2:]
-        height, width = img_size
+            pose_data = T_WCs.data[:, 0, :]
+    
+            img_size = self.frames[0].img.shape[-2:]
+            height, width = img_size
 
-        mast3r_slam_backends.gauss_newton_calib(
-            pose_data,
-            Xs,
-            Cs,
-            K,
-            ii,
-            jj,
-            idx_ii2jj,
-            valid_match,
-            Q_ii2jj,
-            height,
-            width,
-            pixel_border,
-            z_eps,
-            sigma_pixel,
-            sigma_depth,
-            C_thresh,
-            Q_thresh,
-            max_iter,
-            delta_thresh,
-        )
+            mast3r_slam_backends.gauss_newton_calib(
+                pose_data,
+                Xs,
+                Cs,
+                K,
+                ii,
+                jj,
+                idx_ii2jj,
+                valid_match,
+                Q_ii2jj,
+                height,
+                width,
+                pixel_border,
+                z_eps,
+                sigma_pixel,
+                sigma_depth,
+                C_thresh,
+                Q_thresh,
+                max_iter,
+                delta_thresh,
+            )
 
-        # Update the keyframe T_WC
-        self.frames.update_T_WCs(T_WCs[pin:], unique_kf_idx[pin:])
+            # Update the keyframe T_WC
+            self.frames.update_T_WCs(T_WCs[pin:], unique_kf_idx[pin:])

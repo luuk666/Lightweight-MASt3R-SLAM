@@ -24,6 +24,8 @@ from mast3r_slam.tracker import FrameTracker
 from mast3r_slam.visualization import WindowMsg, run_visualization
 import torch.multiprocessing as mp
 
+from mast3r_slam.profiler import profiler
+import queue
 
 def relocalization(frame, keyframes, factor_graph, retrieval_database):
     # we are adding and then removing from the keyframe, so we need to be careful.
@@ -71,7 +73,7 @@ def relocalization(frame, keyframes, factor_graph, retrieval_database):
         return successful_loop_closure
 
 
-def run_backend(cfg, model, states, keyframes, K):
+def run_backend(cfg, model, states, keyframes, K, q):
     set_global_config(cfg)
 
     device = keyframes.device
@@ -131,16 +133,25 @@ def run_backend(cfg, model, states, keyframes, K):
         with states.lock:
             states.edges_ii[:] = factor_graph.ii.cpu().tolist()
             states.edges_jj[:] = factor_graph.jj.cpu().tolist()
+            
+        #print("use_calib =", config["use_calib"])
 
         if config["use_calib"]:
-            factor_graph.solve_GN_calib()
+            with profiler.timer('ba_calib'):
+                factor_graph.solve_GN_calib()
         else:
-            factor_graph.solve_GN_rays()
+            with profiler.timer('ba_rays'):
+                factor_graph.solve_GN_rays()
 
         with states.lock:
             if len(states.global_optimizer_tasks) > 0:
                 idx = states.global_optimizer_tasks.pop(0)
 
+    backend_stats = profiler.get_stats()
+    #q.put(("ba_stats", backend_stats))      # 把计时数据塞回队列
+    #q.put(backend_stats)
+    print("[BACKEND] send stats, iter =", idx)   # 调试用
+    q.put(backend_stats) 
 
 if __name__ == "__main__":
     mp.set_start_method("spawn")
@@ -166,6 +177,8 @@ if __name__ == "__main__":
     manager = mp.Manager()
     main2viz = new_queue(manager, args.no_viz)
     viz2main = new_queue(manager, args.no_viz)
+
+    backend2main = manager.Queue()        # ← 新增，纯粹的 multiprocessing.Queue
 
     dataset = load_dataset(args.dataset)
     dataset.subsample(config["dataset"]["subsample"])
@@ -222,7 +235,7 @@ if __name__ == "__main__":
     tracker = FrameTracker(model, keyframes, device)
     last_msg = WindowMsg()
 
-    backend = mp.Process(target=run_backend, args=(config, model, states, keyframes, K))
+    backend = mp.Process(target=run_backend, args=(config, model, states, keyframes, K, backend2main))
     backend.start()
 
     i = 0
@@ -231,9 +244,22 @@ if __name__ == "__main__":
     frames = []
 
     while True:
-        mode = states.get_mode()
+        # === 收后端 BA 统计（替换原 msg2 写法）========
+        try:
+            ba_stats = backend2main.get_nowait()
+            print("[MAIN] got stats, total keys =", list(ba_stats.keys()))
+            #print("QUEUE RECV", msg["type"])     # 调试打印
+            profiler.merge_stats(ba_stats)
+        except queue.Empty:
+            pass
+        #print("QUEUE SIZE", backend2main.qsize())   # 看看有没有东西滞留
+
         msg = try_get_msg(viz2main)
         last_msg = msg if msg is not None else last_msg
+
+        # 获取当前运行模式
+        mode = states.get_mode()
+        
         if last_msg.is_terminated:
             states.set_mode(Mode.TERMINATED)
             break
@@ -328,8 +354,14 @@ if __name__ == "__main__":
             frame = (frame * 255).clip(0, 255)
             frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
             cv2.imwrite(f"{savedir}/{i}.png", frame)
+    
+    
+    backend.join()  
+    if not args.no_viz:
+        viz.join()    
+              
+    profiler.print_summary()
 
     print("done")
-    backend.join()
-    if not args.no_viz:
-        viz.join()
+
+

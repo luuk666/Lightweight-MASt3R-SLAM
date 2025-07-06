@@ -20,6 +20,8 @@ import torch.nn as nn
 from itertools import repeat
 import collections.abc
 
+#add!!!
+from mast3r_slam.profiler import profiler
 
 def _ntuple(n):
     def parse(x):
@@ -125,8 +127,10 @@ class Block(nn.Module):
         self.mlp = Mlp(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop)
 
     def forward(self, x, xpos):
-        x = x + self.drop_path(self.attn(self.norm1(x), xpos))
-        x = x + self.drop_path(self.mlp(self.norm2(x)))
+        with profiler.timer('attention'):
+            x = x + self.drop_path(self.attn(self.norm1(x), xpos))
+        with profiler.timer('mlp'):
+            x = x + self.drop_path(self.mlp(self.norm2(x)))
         return x
 
 class CrossAttention(nn.Module):
@@ -184,10 +188,13 @@ class DecoderBlock(nn.Module):
         self.norm_y = norm_layer(dim) if norm_mem else nn.Identity()
 
     def forward(self, x, y, xpos, ypos):
-        x = x + self.drop_path(self.attn(self.norm1(x), xpos))
-        y_ = self.norm_y(y)
-        x = x + self.drop_path(self.cross_attn(self.norm2(x), y_, y_, xpos, ypos))
-        x = x + self.drop_path(self.mlp(self.norm3(x)))
+        with profiler.timer('attn'):
+            x = x + self.drop_path(self.attn(self.norm1(x), xpos))
+        with profiler.timer('cross_attn'):
+            y_ = self.norm_y(y)
+            x = x + self.drop_path(self.cross_attn(self.norm2(x), y_, y_, xpos, ypos))
+        with profiler.timer('mlp'):
+            x = x + self.drop_path(self.mlp(self.norm3(x)))
         return x, y
         
         

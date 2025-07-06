@@ -10,6 +10,32 @@ from mast3r_slam.retrieval_database import RetrievalDatabase
 from mast3r_slam.config import config
 import mast3r_slam.matching as matching
 
+from mast3r_slam.profiler import profiler
+
+@torch.inference_mode
+def mast3r_inference_mono(model, frame):
+    if frame.feat is None:
+        with profiler.timer('vit_encode'):
+            frame.feat, frame.pos, _ = model._encode_image(frame.img, frame.img_true_shape)
+
+    feat = frame.feat
+    pos = frame.pos
+    shape = frame.img_true_shape
+
+    with profiler.timer('decoder'):
+        res11, res21 = decoder(model, feat, feat, pos, pos, shape, shape)
+    
+    res = [res11, res21]
+    X, C, D, Q = zip(
+        *[(r["pts3d"][0], r["conf"][0], r["desc"][0], r["desc_conf"][0]) for r in res]
+    )
+    X, C, D, Q = torch.stack(X), torch.stack(C), torch.stack(D), torch.stack(Q)
+    X, C, D, Q = downsample(X, C, D, Q)
+
+    Xii, Xji = einops.rearrange(X, "b h w c -> b (h w) c")
+    Cii, Cji = einops.rearrange(C, "b h w -> b (h w) 1")
+
+    return Xii, Cii
 
 def load_mast3r(path=None, device="cuda"):
     weights_path = (
@@ -55,20 +81,24 @@ def downsample(X, C, D, Q):
 @torch.inference_mode
 def mast3r_symmetric_inference(model, frame_i, frame_j):
     if frame_i.feat is None:
-        frame_i.feat, frame_i.pos, _ = model._encode_image(
-            frame_i.img, frame_i.img_true_shape
-        )
+        with profiler.timer('vit_encode'):
+            frame_i.feat, frame_i.pos, _ = model._encode_image(
+                frame_i.img, frame_i.img_true_shape
+            )
     if frame_j.feat is None:
-        frame_j.feat, frame_j.pos, _ = model._encode_image(
-            frame_j.img, frame_j.img_true_shape
-        )
+        with profiler.timer('vit_encode'):
+            frame_j.feat, frame_j.pos, _ = model._encode_image(
+                frame_j.img, frame_j.img_true_shape
+            )
 
     feat1, feat2 = frame_i.feat, frame_j.feat
     pos1, pos2 = frame_i.pos, frame_j.pos
     shape1, shape2 = frame_i.img_true_shape, frame_j.img_true_shape
 
-    res11, res21 = decoder(model, feat1, feat2, pos1, pos2, shape1, shape2)
-    res22, res12 = decoder(model, feat2, feat1, pos2, pos1, shape2, shape1)
+    with profiler.timer('decoder'):
+        res11, res21 = decoder(model, feat1, feat2, pos1, pos2, shape1, shape2)
+        res22, res12 = decoder(model, feat2, feat1, pos2, pos1, shape2, shape1)
+   
     res = [res11, res21, res22, res12]
     X, C, D, Q = zip(
         *[(r["pts3d"][0], r["conf"][0], r["desc"][0], r["desc_conf"][0]) for r in res]
@@ -91,8 +121,10 @@ def mast3r_decode_symmetric_batch(
         feat2 = feat_j[b][None]
         pos1 = pos_i[b][None]
         pos2 = pos_j[b][None]
-        res11, res21 = decoder(model, feat1, feat2, pos1, pos2, shape_i[b], shape_j[b])
-        res22, res12 = decoder(model, feat2, feat1, pos2, pos1, shape_j[b], shape_i[b])
+        
+        with profiler.timer('decoder'):
+            res11, res21 = decoder(model, feat1, feat2, pos1, pos2, shape_i[b], shape_j[b])
+            res22, res12 = decoder(model, feat2, feat1, pos2, pos1, shape_j[b], shape_i[b])
         res = [res11, res21, res22, res12]
         Xb, Cb, Db, Qb = zip(
             *[
@@ -113,31 +145,6 @@ def mast3r_decode_symmetric_batch(
     )
     X, C, D, Q = downsample(X, C, D, Q)
     return X, C, D, Q
-
-
-@torch.inference_mode
-def mast3r_inference_mono(model, frame):
-    if frame.feat is None:
-        frame.feat, frame.pos, _ = model._encode_image(frame.img, frame.img_true_shape)
-
-    feat = frame.feat
-    pos = frame.pos
-    shape = frame.img_true_shape
-
-    res11, res21 = decoder(model, feat, feat, pos, pos, shape, shape)
-    res = [res11, res21]
-    X, C, D, Q = zip(
-        *[(r["pts3d"][0], r["conf"][0], r["desc"][0], r["desc_conf"][0]) for r in res]
-    )
-    # 4xhxwxc
-    X, C, D, Q = torch.stack(X), torch.stack(C), torch.stack(D), torch.stack(Q)
-    X, C, D, Q = downsample(X, C, D, Q)
-
-    Xii, Xji = einops.rearrange(X, "b h w c -> b (h w) c")
-    Cii, Cji = einops.rearrange(C, "b h w -> b (h w) 1")
-
-    return Xii, Cii
-
 
 def mast3r_match_symmetric(model, feat_i, pos_i, feat_j, pos_j, shape_i, shape_j):
     X, C, D, Q = mast3r_decode_symmetric_batch(
@@ -183,19 +190,23 @@ def mast3r_match_symmetric(model, feat_i, pos_i, feat_j, pos_j, shape_i, shape_j
 @torch.inference_mode
 def mast3r_asymmetric_inference(model, frame_i, frame_j):
     if frame_i.feat is None:
-        frame_i.feat, frame_i.pos, _ = model._encode_image(
-            frame_i.img, frame_i.img_true_shape
-        )
+        with profiler.timer('vit_encode'):
+            frame_i.feat, frame_i.pos, _ = model._encode_image(
+                frame_i.img, frame_i.img_true_shape
+            )
     if frame_j.feat is None:
-        frame_j.feat, frame_j.pos, _ = model._encode_image(
-            frame_j.img, frame_j.img_true_shape
-        )
+        with profiler.timer('vit_encode'):
+            frame_j.feat, frame_j.pos, _ = model._encode_image(
+                frame_j.img, frame_j.img_true_shape
+            )
 
     feat1, feat2 = frame_i.feat, frame_j.feat
     pos1, pos2 = frame_i.pos, frame_j.pos
     shape1, shape2 = frame_i.img_true_shape, frame_j.img_true_shape
 
-    res11, res21 = decoder(model, feat1, feat2, pos1, pos2, shape1, shape2)
+    with profiler.timer('decoder'):
+        res11, res21 = decoder(model, feat1, feat2, pos1, pos2, shape1, shape2)
+    
     res = [res11, res21]
     X, C, D, Q = zip(
         *[(r["pts3d"][0], r["conf"][0], r["desc"][0], r["desc_conf"][0]) for r in res]
