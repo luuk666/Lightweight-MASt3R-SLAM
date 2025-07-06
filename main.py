@@ -27,6 +27,8 @@ import torch.multiprocessing as mp
 from mast3r_slam.profiler import profiler
 import queue
 
+from optimized_mast3r_loader import load_optimized_mast3r
+
 def relocalization(frame, keyframes, factor_graph, retrieval_database):
     # we are adding and then removing from the keyframe, so we need to be careful.
     # The lock slows viz down but safer this way...
@@ -206,7 +208,15 @@ if __name__ == "__main__":
         )
         viz.start()
 
-    model = load_mast3r(device=device)
+    #model = load_mast3r(device=device)
+    #model = load_optimized_mast3r(device=device)
+    try:
+        from optimized_mast3r_loader import load_optimized_mast3r
+        model = load_optimized_mast3r(device=device)
+        print("✓ 使用优化模型")
+    except Exception as e:
+        print(f"优化模型加载失败，使用原始模型: {e}")
+        model = load_mast3r(device=device)
     model.share_memory()
 
     has_calib = dataset.has_calib()
