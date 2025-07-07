@@ -4,9 +4,9 @@
   <h1 align="center">MASt3R-SLAM: Real-Time Dense SLAM with 3D Reconstruction Priors</h1>
   <p align="center">
     <a href="https://rmurai.co.uk/"><strong>Riku Murai*</strong></a>
-    Â·
+    ·
     <a href="https://edexheim.github.io/"><strong>Eric Dexheimer*</strong></a>
-    Â·
+    ·
     <a href="https://www.doc.ic.ac.uk/~ajd/"><strong>Andrew J. Davison</strong></a>
   </p>
   <p align="center">(* Equal Contribution)</p>

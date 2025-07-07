@@ -1,0 +1,684 @@
+TRT-8601-EntropyCalibration2
+input: 3c010a14
+/proj/Conv_output_0: 3d00ec7e
+/Reshape_output_0: 3d00ec7e
+/Transpose_output_0: 3d00ec7e
+/norm1/ReduceMean_output_0: 3a604499
+/norm1/Sub_output_0: 3cfac097
+(Unnamed Layer* 10) [Shuffle]_output: 3c810a14
+/norm1/Pow_output_0: 3ed5ec25
+/norm1/ReduceMean_1_output_0: 3c2dd798
+(Unnamed Layer* 14) [Shuffle]_output: 32074ebd
+/norm1/Add_output_0: 3c2dd79f
+/norm1/Sqrt_output_0: 3c2ae6ea
+/norm1/Div_output_0: 3db30a84
+(Unnamed Layer* 18) [Constant]_output: 3c782ba7
+(Unnamed Layer* 19) [Shuffle]_output: 3c782ba7
+/norm1/Mul_output_0: 3cea952f
+(Unnamed Layer* 21) [Constant]_output: 3ba52348
+(Unnamed Layer* 22) [Shuffle]_output: 3ba52348
+/norm1/Add_1_output_0: 3ca70720
+(Unnamed Layer* 33) [Constant]_output: 3b0266b8
+/qkv/Transpose_output_0: 3b0266b8
+(Unnamed Layer* 35) [Shuffle]_output: 3b0266b8
+/qkv/MatMul_output_0: 3cfcd2bd
+(Unnamed Layer* 37) [Constant]_output: 3d676048
+(Unnamed Layer* 38) [Shuffle]_output: 3d676048
+/qkv/Add_output_0: 3dfb7aba
+/Reshape_1_output_0: 3dfb7aba
+/Transpose_1_output_0: 3dfb7aba
+/Gather_3_output_0: 3ddc9678
+/Gather_4_output_0: 3e1e022d
+/Gather_5_output_0: 3cb9d432
+/Transpose_2_output_0: 3e1e022d
+/MatMul_output_0: 40b5c2aa
+(Unnamed Layer* 63) [Shuffle]_output: 3a810a14
+/Mul_output_0: 3f35c2aa
+(Unnamed Layer* 74) [Shuffle]_output: 3f35c2aa
+(Unnamed Layer* 75) [Softmax]_output: 3a5a425f
+/Softmax_output_0: 3a5a425f
+/MatMul_1_output_0: 3c66ca04
+/Transpose_3_output_0: 3c66ca04
+/Reshape_2_output_0: 3c66ca04
+(Unnamed Layer* 85) [Constant]_output: 3ad023ab
+/proj_1/Transpose_output_0: 3ad023ab
+(Unnamed Layer* 87) [Shuffle]_output: 3ad023ab
+/proj_1/MatMul_output_0: 3d09bd09
+(Unnamed Layer* 89) [Constant]_output: 3c57ede8
+(Unnamed Layer* 90) [Shuffle]_output: 3c57ede8
+/proj_1/Add_output_0: 3d8e33ef
+/Add_output_0: 3d9054fa
+/norm2/ReduceMean_output_0: 3a7563a8
+/norm2/Sub_output_0: 3d979933
+(Unnamed Layer* 96) [Shuffle]_output: 3c810a14
+/norm2/Pow_output_0: 3e7834f1
+/norm2/ReduceMean_1_output_0: 3c517b99
+(Unnamed Layer* 100) [Shuffle]_output: 32074ebd
+/norm2/Add_output_0: 3c517ba0
+/norm2/Sqrt_output_0: 3c334c7b
+/norm2/Div_output_0: 3dde4f46
+(Unnamed Layer* 104) [Constant]_output: 3cc2f0f3
+(Unnamed Layer* 105) [Shuffle]_output: 3cc2f0f3
+/norm2/Mul_output_0: 3d376415
+(Unnamed Layer* 107) [Constant]_output: 3c31da4a
+(Unnamed Layer* 108) [Shuffle]_output: 3c31da4a
+/norm2/Add_1_output_0: 3d368841
+(Unnamed Layer* 110) [Constant]_output: 3a80f82f
+/mlp/fc1/Transpose_output_0: 3a80f82f
+(Unnamed Layer* 112) [Shuffle]_output: 3a80f82f
+/mlp/fc1/MatMul_output_0: 3d9f72d2
+(Unnamed Layer* 114) [Constant]_output: 3c4c6c84
+(Unnamed Layer* 115) [Shuffle]_output: 3c4c6c84
+/mlp/fc1/Add_output_0: 3da032a3
+(Unnamed Layer* 118) [Shuffle]_output: 3c367d3d
+/mlp/act/Div_output_0: 3d628dce
+/mlp/act/Erf_output_0: 3c010a14
+(Unnamed Layer* 122) [Shuffle]_output: 3c010a14
+/mlp/act/Add_output_0: 3c810a14
+/mlp/act/Mul_output_0: 3cee34d1
+(Unnamed Layer* 126) [Shuffle]_output: 3b810a14
+/mlp/act/Mul_1_output_0: 3c6e34d1
+(Unnamed Layer* 128) [Constant]_output: 3b2c7787
+/mlp/fc2/Transpose_output_0: 3b2c7787
+(Unnamed Layer* 130) [Shuffle]_output: 3b2c7787
+/mlp/fc2/MatMul_output_0: 3c94ca07
+(Unnamed Layer* 132) [Constant]_output: 3c03e1d1
+(Unnamed Layer* 133) [Shuffle]_output: 3c03e1d1
+/mlp/fc2/Add_output_0: 3c7de9d0
+/Add_1_output_0: 3da0e279
+/norm1_1/ReduceMean_output_0: 3a6e3110
+/norm1_1/Sub_output_0: 3da74498
+(Unnamed Layer* 139) [Shuffle]_output: 3c810a14
+/norm1_1/Pow_output_0: 3e6cd0a6
+/norm1_1/ReduceMean_1_output_0: 3c219932
+(Unnamed Layer* 143) [Shuffle]_output: 32074ebd
+/norm1_1/Add_output_0: 3c219938
+/norm1_1/Sqrt_output_0: 3c1d45e1
+/norm1_1/Div_output_0: 3dedcd66
+(Unnamed Layer* 147) [Constant]_output: 3bb2caf4
+(Unnamed Layer* 148) [Shuffle]_output: 3bb2caf4
+/norm1_1/Mul_output_0: 3cb424c9
+(Unnamed Layer* 150) [Constant]_output: 3b4f0ba1
+(Unnamed Layer* 151) [Shuffle]_output: 3b4f0ba1
+/norm1_1/Add_1_output_0: 3c9f32df
+(Unnamed Layer* 162) [Constant]_output: 3b021242
+/qkv_1/Transpose_output_0: 3b021242
+(Unnamed Layer* 164) [Shuffle]_output: 3b021242
+/qkv_1/MatMul_output_0: 3cfa4bd5
+(Unnamed Layer* 166) [Constant]_output: 3cd88491
+(Unnamed Layer* 167) [Shuffle]_output: 3cd88491
+/qkv_1/Add_output_0: 3d467db4
+/Reshape_3_output_0: 3d467db4
+/Transpose_4_output_0: 3d467db4
+/Gather_9_output_0: 3d887039
+/Gather_10_output_0: 3d2f32e1
+/Gather_11_output_0: 3c91b12d
+/Transpose_5_output_0: 3d2f32e1
+/MatMul_2_output_0: 3f9ec082
+(Unnamed Layer* 187) [Shuffle]_output: 3a810a14
+/Mul_1_output_0: 3e1ec082
+(Unnamed Layer* 198) [Shuffle]_output: 3e1ec082
+(Unnamed Layer* 199) [Softmax]_output: 3958b68b
+/Softmax_1_output_0: 3958b68b
+/MatMul_3_output_0: 3c84a495
+/Transpose_6_output_0: 3c84a495
+/Reshape_4_output_0: 3c84a495
+(Unnamed Layer* 209) [Constant]_output: 3b01ccbb
+/proj_2/Transpose_output_0: 3b01ccbb
+(Unnamed Layer* 211) [Shuffle]_output: 3b01ccbb
+/proj_2/MatMul_output_0: 3d589f12
+(Unnamed Layer* 213) [Constant]_output: 3c0c0db1
+(Unnamed Layer* 214) [Shuffle]_output: 3c0c0db1
+/proj_2/Add_output_0: 3d256371
+/Add_2_output_0: 3dde7c76
+/norm2_1/ReduceMean_output_0: 3a79015f
+/norm2_1/Sub_output_0: 3dd278b0
+(Unnamed Layer* 220) [Shuffle]_output: 3c810a14
+/norm2_1/Pow_output_0: 3e8c26af
+/norm2_1/ReduceMean_1_output_0: 3c6ed1e7
+(Unnamed Layer* 224) [Shuffle]_output: 32074ebd
+/norm2_1/Add_output_0: 3c6ed1f0
+/norm2_1/Sqrt_output_0: 3c353c21
+/norm2_1/Div_output_0: 3e145d13
+(Unnamed Layer* 228) [Constant]_output: 3c7aa141
+(Unnamed Layer* 229) [Shuffle]_output: 3c7aa141
+/norm2_1/Mul_output_0: 3d2da1aa
+(Unnamed Layer* 231) [Constant]_output: 3be98aaf
+(Unnamed Layer* 232) [Shuffle]_output: 3be98aaf
+/norm2_1/Add_1_output_0: 3d17790b
+(Unnamed Layer* 234) [Constant]_output: 3a8259c2
+/mlp/fc1_1/Transpose_output_0: 3a8259c2
+(Unnamed Layer* 236) [Shuffle]_output: 3a8259c2
+/mlp/fc1_1/MatMul_output_0: 3d64072d
+(Unnamed Layer* 238) [Constant]_output: 3c5317fd
+(Unnamed Layer* 239) [Shuffle]_output: 3c5317fd
+/mlp/fc1_1/Add_output_0: 3d832cc9
+(Unnamed Layer* 242) [Shuffle]_output: 3c367d3d
+/mlp/act_1/Div_output_0: 3d398266
+/mlp/act_1/Erf_output_0: 3c010a14
+(Unnamed Layer* 246) [Shuffle]_output: 3c010a14
+/mlp/act_1/Add_output_0: 3c810a14
+/mlp/act_1/Mul_output_0: 3ce02110
+(Unnamed Layer* 250) [Shuffle]_output: 3b810a14
+/mlp/act_1/Mul_1_output_0: 3c602110
+(Unnamed Layer* 252) [Constant]_output: 3b01d4cd
+/mlp/fc2_1/Transpose_output_0: 3b01d4cd
+(Unnamed Layer* 254) [Shuffle]_output: 3b01d4cd
+/mlp/fc2_1/MatMul_output_0: 3cf56c4d
+(Unnamed Layer* 256) [Constant]_output: 3bfc000d
+(Unnamed Layer* 257) [Shuffle]_output: 3bfc000d
+/mlp/fc2_1/Add_output_0: 3e08e96a
+/Add_3_output_0: 3da6e036
+/norm1_2/ReduceMean_output_0: 3a884e94
+/norm1_2/Sub_output_0: 3d999352
+(Unnamed Layer* 263) [Shuffle]_output: 3c810a14
+/norm1_2/Pow_output_0: 3eca994d
+/norm1_2/ReduceMean_1_output_0: 3c4158e1
+(Unnamed Layer* 267) [Shuffle]_output: 32074ebd
+/norm1_2/Add_output_0: 3c4158ea
+/norm1_2/Sqrt_output_0: 3c1bf339
+/norm1_2/Div_output_0: 3de82146
+(Unnamed Layer* 271) [Constant]_output: 3c1a64d4
+(Unnamed Layer* 272) [Shuffle]_output: 3c1a64d4
+/norm1_2/Mul_output_0: 3ce24a79
+(Unnamed Layer* 274) [Constant]_output: 3ae4982c
+(Unnamed Layer* 275) [Shuffle]_output: 3ae4982c
+/norm1_2/Add_1_output_0: 3cd77b21
+(Unnamed Layer* 286) [Constant]_output: 3acef57f
+/qkv_2/Transpose_output_0: 3acef57f
+(Unnamed Layer* 288) [Shuffle]_output: 3acef57f
+/qkv_2/MatMul_output_0: 3cdcc680
+(Unnamed Layer* 290) [Constant]_output: 3cb76693
+(Unnamed Layer* 291) [Shuffle]_output: 3cb76693
+/qkv_2/Add_output_0: 3d11498c
+/Reshape_5_output_0: 3d11498c
+/Transpose_7_output_0: 3d11498c
+/Gather_15_output_0: 3d11ff17
+/Gather_16_output_0: 3cf03a28
+/Gather_17_output_0: 3c9c07d5
+/Transpose_8_output_0: 3cf03a28
+/MatMul_4_output_0: 3f4dc67b
+(Unnamed Layer* 311) [Shuffle]_output: 3a810a14
+/Mul_2_output_0: 3dcdc67b
+(Unnamed Layer* 322) [Shuffle]_output: 3dcdc67b
+(Unnamed Layer* 323) [Softmax]_output: 39ec652a
+/Softmax_2_output_0: 39ec652a
+/MatMul_5_output_0: 3c505808
+/Transpose_9_output_0: 3c505808
+/Reshape_6_output_0: 3c505808
+(Unnamed Layer* 333) [Constant]_output: 3a9436ca
+/proj_3/Transpose_output_0: 3a9436ca
+(Unnamed Layer* 335) [Shuffle]_output: 3a9436ca
+/proj_3/MatMul_output_0: 3ca10097
+(Unnamed Layer* 337) [Constant]_output: 3baf9ee7
+(Unnamed Layer* 338) [Shuffle]_output: 3baf9ee7
+/proj_3/Add_output_0: 3c9ebd46
+/Add_4_output_0: 3dada39b
+/norm2_2/ReduceMean_output_0: 3a80d817
+/norm2_2/Sub_output_0: 3da2075d
+(Unnamed Layer* 344) [Shuffle]_output: 3c810a14
+/norm2_2/Pow_output_0: 3ec84f1b
+/norm2_2/ReduceMean_1_output_0: 3c41e20d
+(Unnamed Layer* 348) [Shuffle]_output: 32074ebd
+/norm2_2/Add_output_0: 3c41e216
+/norm2_2/Sqrt_output_0: 3c2c0558
+/norm2_2/Div_output_0: 3df1297d
+(Unnamed Layer* 352) [Constant]_output: 3ca398dc
+(Unnamed Layer* 353) [Shuffle]_output: 3ca398dc
+/norm2_2/Mul_output_0: 3d6d6d90
+(Unnamed Layer* 355) [Constant]_output: 3c0e8f19
+(Unnamed Layer* 356) [Shuffle]_output: 3c0e8f19
+/norm2_2/Add_1_output_0: 3d70d291
+(Unnamed Layer* 358) [Constant]_output: 3aac9428
+/mlp/fc1_2/Transpose_output_0: 3aac9428
+(Unnamed Layer* 360) [Shuffle]_output: 3aac9428
+/mlp/fc1_2/MatMul_output_0: 3d3d239a
+(Unnamed Layer* 362) [Constant]_output: 3c677946
+(Unnamed Layer* 363) [Shuffle]_output: 3c677946
+/mlp/fc1_2/Add_output_0: 3d481363
+(Unnamed Layer* 366) [Shuffle]_output: 3c367d3d
+/mlp/act_2/Div_output_0: 3d0d7994
+/mlp/act_2/Erf_output_0: 3c010a14
+(Unnamed Layer* 370) [Shuffle]_output: 3c010a14
+/mlp/act_2/Add_output_0: 3c61ba0f
+/mlp/act_2/Mul_output_0: 3c3c1c38
+(Unnamed Layer* 374) [Shuffle]_output: 3b810a14
+/mlp/act_2/Mul_1_output_0: 3bbc1c38
+(Unnamed Layer* 376) [Constant]_output: 3b012a16
+/mlp/fc2_2/Transpose_output_0: 3b012a16
+(Unnamed Layer* 378) [Shuffle]_output: 3b012a16
+/mlp/fc2_2/MatMul_output_0: 3cbf963b
+(Unnamed Layer* 380) [Constant]_output: 3bc24005
+(Unnamed Layer* 381) [Shuffle]_output: 3bc24005
+/mlp/fc2_2/Add_output_0: 3cadc234
+/Add_5_output_0: 3db5d025
+/norm1_3/ReduceMean_output_0: 3a819f5d
+/norm1_3/Sub_output_0: 3db40f53
+(Unnamed Layer* 387) [Shuffle]_output: 3c810a14
+/norm1_3/Pow_output_0: 3ec36a97
+/norm1_3/ReduceMean_1_output_0: 3c835135
+(Unnamed Layer* 391) [Shuffle]_output: 32074ebd
+/norm1_3/Add_output_0: 3c83513b
+/norm1_3/Sqrt_output_0: 3c2d04b5
+/norm1_3/Div_output_0: 3e021ec4
+(Unnamed Layer* 395) [Constant]_output: 3c308265
+(Unnamed Layer* 396) [Shuffle]_output: 3c308265
+/norm1_3/Mul_output_0: 3c9f945f
+(Unnamed Layer* 398) [Constant]_output: 3adc061f
+(Unnamed Layer* 399) [Shuffle]_output: 3adc061f
+/norm1_3/Add_1_output_0: 3cb10255
+(Unnamed Layer* 410) [Constant]_output: 3ad0149f
+/qkv_3/Transpose_output_0: 3ad0149f
+(Unnamed Layer* 412) [Shuffle]_output: 3ad0149f
+/qkv_3/MatMul_output_0: 3ccbbc0a
+(Unnamed Layer* 414) [Constant]_output: 3cb69677
+(Unnamed Layer* 415) [Shuffle]_output: 3cb69677
+/qkv_3/Add_output_0: 3d1831eb
+/Reshape_7_output_0: 3d1831eb
+/Transpose_10_output_0: 3d1831eb
+/Gather_21_output_0: 3d1d70b4
+/Gather_22_output_0: 3d0ed8af
+/Gather_23_output_0: 3c6f13c8
+/Transpose_11_output_0: 3d0ed8af
+/MatMul_6_output_0: 3f1c6d97
+(Unnamed Layer* 435) [Shuffle]_output: 3a810a14
+/Mul_3_output_0: 3d9c6d97
+(Unnamed Layer* 446) [Shuffle]_output: 3d9c6d97
+(Unnamed Layer* 447) [Softmax]_output: 39cf83b0
+/Softmax_3_output_0: 39cf83b0
+/MatMul_7_output_0: 3bd574af
+/Transpose_12_output_0: 3bd574af
+/Reshape_8_output_0: 3bd574af
+(Unnamed Layer* 457) [Constant]_output: 3acf8722
+/proj_4/Transpose_output_0: 3acf8722
+(Unnamed Layer* 459) [Shuffle]_output: 3acf8722
+/proj_4/MatMul_output_0: 3bc61bc6
+(Unnamed Layer* 461) [Constant]_output: 3bb88407
+(Unnamed Layer* 462) [Shuffle]_output: 3bb88407
+/proj_4/Add_output_0: 3c6ec8ac
+/Add_6_output_0: 3daedfb6
+/norm2_3/ReduceMean_output_0: 3a808041
+/norm2_3/Sub_output_0: 3dac442e
+(Unnamed Layer* 468) [Shuffle]_output: 3c810a14
+/norm2_3/Pow_output_0: 3edbbb1e
+/norm2_3/ReduceMean_1_output_0: 3c5a080e
+(Unnamed Layer* 472) [Shuffle]_output: 32074ebd
+/norm2_3/Add_output_0: 3c5a0819
+/norm2_3/Sqrt_output_0: 3c2c858d
+/norm2_3/Div_output_0: 3de7fb78
+(Unnamed Layer* 476) [Constant]_output: 3cfd1e17
+(Unnamed Layer* 477) [Shuffle]_output: 3cfd1e17
+/norm2_3/Mul_output_0: 3d9ae490
+(Unnamed Layer* 479) [Constant]_output: 3bcde48b
+(Unnamed Layer* 480) [Shuffle]_output: 3bcde48b
+/norm2_3/Add_1_output_0: 3db1f118
+(Unnamed Layer* 482) [Constant]_output: 3acf4e31
+/mlp/fc1_3/Transpose_output_0: 3acf4e31
+(Unnamed Layer* 484) [Shuffle]_output: 3acf4e31
+/mlp/fc1_3/MatMul_output_0: 3d2b022c
+(Unnamed Layer* 486) [Constant]_output: 3c966505
+(Unnamed Layer* 487) [Shuffle]_output: 3c966505
+/mlp/fc1_3/Add_output_0: 3d4ee1c6
+(Unnamed Layer* 490) [Shuffle]_output: 3c367d3d
+/mlp/act_3/Div_output_0: 3d1249a1
+/mlp/act_3/Erf_output_0: 3c010a14
+(Unnamed Layer* 494) [Shuffle]_output: 3c010a14
+/mlp/act_3/Add_output_0: 3c6164d0
+/mlp/act_3/Mul_output_0: 3c811762
+(Unnamed Layer* 498) [Shuffle]_output: 3b810a14
+/mlp/act_3/Mul_1_output_0: 3c011762
+(Unnamed Layer* 500) [Constant]_output: 3acea5c7
+/mlp/fc2_3/Transpose_output_0: 3acea5c7
+(Unnamed Layer* 502) [Shuffle]_output: 3acea5c7
+/mlp/fc2_3/MatMul_output_0: 3da45cf6
+(Unnamed Layer* 504) [Constant]_output: 3bb5d9b2
+(Unnamed Layer* 505) [Shuffle]_output: 3bb5d9b2
+/mlp/fc2_3/Add_output_0: 3d986eaa
+/Add_7_output_0: 3e135b97
+/norm1_4/ReduceMean_output_0: 3a86e1fb
+/norm1_4/Sub_output_0: 3e146917
+(Unnamed Layer* 511) [Shuffle]_output: 3c810a14
+/norm1_4/Pow_output_0: 3f441d96
+/norm1_4/ReduceMean_1_output_0: 3c83e610
+(Unnamed Layer* 515) [Shuffle]_output: 32074ebd
+/norm1_4/Add_output_0: 3c83e615
+/norm1_4/Sqrt_output_0: 3c5d52b2
+/norm1_4/Div_output_0: 3e1363c8
+(Unnamed Layer* 519) [Constant]_output: 3c05b849
+(Unnamed Layer* 520) [Shuffle]_output: 3c05b849
+/norm1_4/Mul_output_0: 3d04c39d
+(Unnamed Layer* 522) [Constant]_output: 3b38103f
+(Unnamed Layer* 523) [Shuffle]_output: 3b38103f
+/norm1_4/Add_1_output_0: 3d0c17f5
+(Unnamed Layer* 534) [Constant]_output: 3aceef93
+/qkv_4/Transpose_output_0: 3aceef93
+(Unnamed Layer* 536) [Shuffle]_output: 3aceef93
+/qkv_4/MatMul_output_0: 3d4a1e5d
+(Unnamed Layer* 538) [Constant]_output: 3cf86dc4
+(Unnamed Layer* 539) [Shuffle]_output: 3cf86dc4
+/qkv_4/Add_output_0: 3db27dac
+/Reshape_9_output_0: 3db27dac
+/Transpose_13_output_0: 3db27dac
+/Gather_27_output_0: 3daebfd4
+/Gather_28_output_0: 3dba1c28
+/Gather_29_output_0: 3d3a6d07
+/Transpose_14_output_0: 3dba1c28
+/MatMul_8_output_0: 3fdad1d1
+(Unnamed Layer* 559) [Shuffle]_output: 3a810a14
+/Mul_4_output_0: 3e5ad1d1
+(Unnamed Layer* 570) [Shuffle]_output: 3e5ad1d1
+(Unnamed Layer* 571) [Softmax]_output: 3a1b9490
+/Softmax_4_output_0: 3a1b9490
+/MatMul_9_output_0: 3cf3054b
+/Transpose_15_output_0: 3cf3054b
+/Reshape_10_output_0: 3cf3054b
+(Unnamed Layer* 581) [Constant]_output: 3acef596
+/proj_5/Transpose_output_0: 3acef596
+(Unnamed Layer* 583) [Shuffle]_output: 3acef596
+/proj_5/MatMul_output_0: 3d88ff2d
+(Unnamed Layer* 585) [Constant]_output: 3ba70a80
+(Unnamed Layer* 586) [Shuffle]_output: 3ba70a80
+/proj_5/Add_output_0: 3d8dc8b7
+/Add_8_output_0: 3e16148b
+/norm2_4/ReduceMean_output_0: 3a86e7d2
+/norm2_4/Sub_output_0: 3e15c9d2
+(Unnamed Layer* 592) [Shuffle]_output: 3c810a14
+/norm2_4/Pow_output_0: 3f5da85b
+/norm2_4/ReduceMean_1_output_0: 3cb501af
+(Unnamed Layer* 596) [Shuffle]_output: 32074ebd
+/norm2_4/Add_output_0: 3cb501b5
+/norm2_4/Sqrt_output_0: 3c5fd671
+/norm2_4/Div_output_0: 3e14c336
+(Unnamed Layer* 600) [Constant]_output: 3c44512b
+(Unnamed Layer* 601) [Shuffle]_output: 3c44512b
+/norm2_4/Mul_output_0: 3d85235b
+(Unnamed Layer* 603) [Constant]_output: 3b6f13b0
+(Unnamed Layer* 604) [Shuffle]_output: 3b6f13b0
+/norm2_4/Add_1_output_0: 3d923ed1
+(Unnamed Layer* 606) [Constant]_output: 3aacf515
+/mlp/fc1_4/Transpose_output_0: 3aacf515
+(Unnamed Layer* 608) [Shuffle]_output: 3aacf515
+/mlp/fc1_4/MatMul_output_0: 3d1eb513
+(Unnamed Layer* 610) [Constant]_output: 3c7213b8
+(Unnamed Layer* 611) [Shuffle]_output: 3c7213b8
+/mlp/fc1_4/Add_output_0: 3d39e2bf
+(Unnamed Layer* 614) [Shuffle]_output: 3c367d3d
+/mlp/act_4/Div_output_0: 3d0370ea
+/mlp/act_4/Erf_output_0: 3c010a14
+(Unnamed Layer* 618) [Shuffle]_output: 3c010a14
+/mlp/act_4/Add_output_0: 3c61e27d
+/mlp/act_4/Mul_output_0: 3c80cf3c
+(Unnamed Layer* 622) [Shuffle]_output: 3b810a14
+/mlp/act_4/Mul_1_output_0: 3c00cf3c
+(Unnamed Layer* 624) [Constant]_output: 3b013068
+/mlp/fc2_4/Transpose_output_0: 3b013068
+(Unnamed Layer* 626) [Shuffle]_output: 3b013068
+/mlp/fc2_4/MatMul_output_0: 3d2ebc21
+(Unnamed Layer* 628) [Constant]_output: 3b47337c
+(Unnamed Layer* 629) [Shuffle]_output: 3b47337c
+/mlp/fc2_4/Add_output_0: 3daab77d
+/Add_9_output_0: 3e046460
+/norm1_5/ReduceMean_output_0: 3a849c33
+/norm1_5/Sub_output_0: 3e04586f
+(Unnamed Layer* 635) [Shuffle]_output: 3c810a14
+/norm1_5/Pow_output_0: 3f64cc45
+/norm1_5/ReduceMean_1_output_0: 3bc1ed66
+(Unnamed Layer* 639) [Shuffle]_output: 32074ebd
+/norm1_5/Add_output_0: 3bc1ed6b
+/norm1_5/Sqrt_output_0: 3c48561e
+/norm1_5/Div_output_0: 3dceaf99
+(Unnamed Layer* 643) [Constant]_output: 3c05fd5e
+(Unnamed Layer* 644) [Shuffle]_output: 3c05fd5e
+/norm1_5/Mul_output_0: 3d65477e
+(Unnamed Layer* 646) [Constant]_output: 3bda672c
+(Unnamed Layer* 647) [Shuffle]_output: 3bda672c
+/norm1_5/Add_1_output_0: 3d632af7
+(Unnamed Layer* 658) [Constant]_output: 3ab31d25
+/qkv_5/Transpose_output_0: 3ab31d25
+(Unnamed Layer* 660) [Shuffle]_output: 3ab31d25
+/qkv_5/MatMul_output_0: 3d186828
+(Unnamed Layer* 662) [Constant]_output: 3cd9f1a2
+(Unnamed Layer* 663) [Shuffle]_output: 3cd9f1a2
+/qkv_5/Add_output_0: 3db295d9
+/Reshape_11_output_0: 3db295d9
+/Transpose_16_output_0: 3db295d9
+/Gather_33_output_0: 3d71b0be
+/Gather_34_output_0: 3db4332a
+/Gather_35_output_0: 3d185120
+/Transpose_17_output_0: 3db4332a
+/MatMul_10_output_0: 3fa474f3
+(Unnamed Layer* 683) [Shuffle]_output: 3a810a14
+/Mul_5_output_0: 3e2474f3
+(Unnamed Layer* 694) [Shuffle]_output: 3e2474f3
+(Unnamed Layer* 695) [Softmax]_output: 39e2a586
+/Softmax_5_output_0: 39e2a586
+/MatMul_11_output_0: 3ca7ac79
+/Transpose_18_output_0: 3ca7ac79
+/Reshape_12_output_0: 3ca7ac79
+(Unnamed Layer* 705) [Constant]_output: 3aaf464a
+/proj_6/Transpose_output_0: 3aaf464a
+(Unnamed Layer* 707) [Shuffle]_output: 3aaf464a
+/proj_6/MatMul_output_0: 3cd8e191
+(Unnamed Layer* 709) [Constant]_output: 3b87a688
+(Unnamed Layer* 710) [Shuffle]_output: 3b87a688
+/proj_6/Add_output_0: 3d3841bb
+/Add_10_output_0: 3e0dd332
+/norm2_5/ReduceMean_output_0: 3a8b24a6
+/norm2_5/Sub_output_0: 3e0dcab1
+(Unnamed Layer* 716) [Shuffle]_output: 3c810a14
+/norm2_5/Pow_output_0: 3f63a47b
+/norm2_5/ReduceMean_1_output_0: 3cdd9145
+(Unnamed Layer* 720) [Shuffle]_output: 32074ebd
+/norm2_5/Add_output_0: 3cdd914b
+/norm2_5/Sqrt_output_0: 3c61436b
+/norm2_5/Div_output_0: 3e15e59c
+(Unnamed Layer* 724) [Constant]_output: 3c521a4b
+(Unnamed Layer* 725) [Shuffle]_output: 3c521a4b
+/norm2_5/Mul_output_0: 3dcc9b04
+(Unnamed Layer* 727) [Constant]_output: 3b63f661
+(Unnamed Layer* 728) [Shuffle]_output: 3b63f661
+/norm2_5/Add_1_output_0: 3dda4eb5
+(Unnamed Layer* 730) [Constant]_output: 3a943256
+/mlp/fc1_5/Transpose_output_0: 3a943256
+(Unnamed Layer* 732) [Shuffle]_output: 3a943256
+/mlp/fc1_5/MatMul_output_0: 3d3f373b
+(Unnamed Layer* 734) [Constant]_output: 3c706d14
+(Unnamed Layer* 735) [Shuffle]_output: 3c706d14
+/mlp/fc1_5/Add_output_0: 3d68576e
+(Unnamed Layer* 738) [Shuffle]_output: 3c367d3d
+/mlp/act_5/Div_output_0: 3d244a50
+/mlp/act_5/Erf_output_0: 3c010a14
+(Unnamed Layer* 742) [Shuffle]_output: 3c010a14
+/mlp/act_5/Add_output_0: 3c80ee84
+/mlp/act_5/Mul_output_0: 3c8cb999
+(Unnamed Layer* 746) [Shuffle]_output: 3b810a14
+/mlp/act_5/Mul_1_output_0: 3c0cb999
+(Unnamed Layer* 748) [Constant]_output: 3ad08923
+/mlp/fc2_5/Transpose_output_0: 3ad08923
+(Unnamed Layer* 750) [Shuffle]_output: 3ad08923
+/mlp/fc2_5/MatMul_output_0: 3dc6b851
+(Unnamed Layer* 752) [Constant]_output: 3b658dd4
+(Unnamed Layer* 753) [Shuffle]_output: 3b658dd4
+/mlp/fc2_5/Add_output_0: 3d67dc52
+/Add_11_output_0: 3e0fd1ed
+/norm1_6/ReduceMean_output_0: 3a862aed
+/norm1_6/Sub_output_0: 3e153b9a
+(Unnamed Layer* 759) [Shuffle]_output: 3c810a14
+/norm1_6/Pow_output_0: 3f4c2b61
+/norm1_6/ReduceMean_1_output_0: 3ce72c5f
+(Unnamed Layer* 763) [Shuffle]_output: 32074ebd
+/norm1_6/Add_output_0: 3ce72c65
+/norm1_6/Sqrt_output_0: 3c701d10
+/norm1_6/Div_output_0: 3dca703f
+(Unnamed Layer* 767) [Constant]_output: 3c248073
+(Unnamed Layer* 768) [Shuffle]_output: 3c248073
+/norm1_6/Mul_output_0: 3d747f92
+(Unnamed Layer* 770) [Constant]_output: 3aa1553e
+(Unnamed Layer* 771) [Shuffle]_output: 3aa1553e
+/norm1_6/Add_1_output_0: 3d7685d1
+(Unnamed Layer* 782) [Constant]_output: 3aac2a9c
+/qkv_6/Transpose_output_0: 3aac2a9c
+(Unnamed Layer* 784) [Shuffle]_output: 3aac2a9c
+/qkv_6/MatMul_output_0: 3ceb126f
+(Unnamed Layer* 786) [Constant]_output: 3cdf29f3
+(Unnamed Layer* 787) [Shuffle]_output: 3cdf29f3
+/qkv_6/Add_output_0: 3d49d1a4
+/Reshape_13_output_0: 3d49d1a4
+/Transpose_19_output_0: 3d49d1a4
+/Gather_39_output_0: 3d508344
+/Gather_40_output_0: 3d0a2146
+/Gather_41_output_0: 3cb6f87e
+/Transpose_20_output_0: 3d0a2146
+/MatMul_12_output_0: 3f2a7498
+(Unnamed Layer* 807) [Shuffle]_output: 3a810a14
+/Mul_6_output_0: 3daa7498
+(Unnamed Layer* 818) [Shuffle]_output: 3daa7498
+(Unnamed Layer* 819) [Softmax]_output: 39b26938
+/Softmax_6_output_0: 39b26938
+/MatMul_13_output_0: 3c4c74e2
+/Transpose_21_output_0: 3c4c74e2
+/Reshape_14_output_0: 3c4c74e2
+(Unnamed Layer* 829) [Constant]_output: 3adbba6e
+/proj_7/Transpose_output_0: 3adbba6e
+(Unnamed Layer* 831) [Shuffle]_output: 3adbba6e
+/proj_7/MatMul_output_0: 3caab034
+(Unnamed Layer* 833) [Constant]_output: 3b40975f
+(Unnamed Layer* 834) [Shuffle]_output: 3b40975f
+/proj_7/Add_output_0: 3d3d9df0
+/Add_12_output_0: 3e15b695
+/norm2_6/ReduceMean_output_0: 3a88416f
+/norm2_6/Sub_output_0: 3e146fe4
+(Unnamed Layer* 840) [Shuffle]_output: 3c810a14
+/norm2_6/Pow_output_0: 3f3e2c86
+/norm2_6/ReduceMean_1_output_0: 3cbcefac
+(Unnamed Layer* 844) [Shuffle]_output: 32074ebd
+/norm2_6/Add_output_0: 3cbcefb1
+/norm2_6/Sqrt_output_0: 3c7df9b1
+/norm2_6/Div_output_0: 3e0477f7
+(Unnamed Layer* 848) [Constant]_output: 3c833d7d
+(Unnamed Layer* 849) [Shuffle]_output: 3c833d7d
+/norm2_6/Mul_output_0: 3dcda5e1
+(Unnamed Layer* 851) [Constant]_output: 3b801993
+(Unnamed Layer* 852) [Shuffle]_output: 3b801993
+/norm2_6/Add_1_output_0: 3de21d22
+(Unnamed Layer* 854) [Constant]_output: 3a9f097c
+/mlp/fc1_6/Transpose_output_0: 3a9f097c
+(Unnamed Layer* 856) [Shuffle]_output: 3a9f097c
+/mlp/fc1_6/MatMul_output_0: 3d4115cd
+(Unnamed Layer* 858) [Constant]_output: 3c420434
+(Unnamed Layer* 859) [Shuffle]_output: 3c420434
+/mlp/fc1_6/Add_output_0: 3d5ba016
+(Unnamed Layer* 862) [Shuffle]_output: 3c367d3d
+/mlp/act_6/Div_output_0: 3d1b4c70
+/mlp/act_6/Erf_output_0: 3c010a14
+(Unnamed Layer* 866) [Shuffle]_output: 3c010a14
+/mlp/act_6/Add_output_0: 3c8111df
+/mlp/act_6/Mul_output_0: 3cbdb78f
+(Unnamed Layer* 870) [Shuffle]_output: 3b810a14
+/mlp/act_6/Mul_1_output_0: 3c3db78f
+(Unnamed Layer* 872) [Constant]_output: 3aced6df
+/mlp/fc2_6/Transpose_output_0: 3aced6df
+(Unnamed Layer* 874) [Shuffle]_output: 3aced6df
+/mlp/fc2_6/MatMul_output_0: 3d7489c3
+(Unnamed Layer* 876) [Constant]_output: 3b33e6e2
+(Unnamed Layer* 877) [Shuffle]_output: 3b33e6e2
+/mlp/fc2_6/Add_output_0: 3cf9f0e0
+/Add_13_output_0: 3e2e0462
+/norm1_7/ReduceMean_output_0: 3a8fcc53
+/norm1_7/Sub_output_0: 3e2ad771
+(Unnamed Layer* 883) [Shuffle]_output: 3c810a14
+/norm1_7/Pow_output_0: 3f45e39c
+/norm1_7/ReduceMean_1_output_0: 3cd2e9ca
+(Unnamed Layer* 887) [Shuffle]_output: 32074ebd
+/norm1_7/Add_output_0: 3cd2e9cf
+/norm1_7/Sqrt_output_0: 3c80a90d
+/norm1_7/Div_output_0: 3e09fd6d
+(Unnamed Layer* 891) [Constant]_output: 3c468b7b
+(Unnamed Layer* 892) [Shuffle]_output: 3c468b7b
+/norm1_7/Mul_output_0: 3d81c1ac
+(Unnamed Layer* 894) [Constant]_output: 3b407e9b
+(Unnamed Layer* 895) [Shuffle]_output: 3b407e9b
+/norm1_7/Add_1_output_0: 3d809b4a
+(Unnamed Layer* 906) [Constant]_output: 3abc6523
+/qkv_7/Transpose_output_0: 3abc6523
+(Unnamed Layer* 908) [Shuffle]_output: 3abc6523
+/qkv_7/MatMul_output_0: 3d52092d
+(Unnamed Layer* 910) [Constant]_output: 3cf0887f
+(Unnamed Layer* 911) [Shuffle]_output: 3cf0887f
+/qkv_7/Add_output_0: 3dbc27ed
+/Reshape_15_output_0: 3dbc27ed
+/Transpose_22_output_0: 3dbc27ed
+/Gather_45_output_0: 3d9f3b37
+/Gather_46_output_0: 3dc45519
+/Gather_47_output_0: 3cb9389b
+/Transpose_23_output_0: 3dc45519
+/MatMul_14_output_0: 3f997c47
+(Unnamed Layer* 931) [Shuffle]_output: 3a810a14
+/Mul_7_output_0: 3e197c47
+(Unnamed Layer* 942) [Shuffle]_output: 3e197c47
+(Unnamed Layer* 943) [Softmax]_output: 3a2865e9
+/Softmax_7_output_0: 3a2865e9
+/MatMul_15_output_0: 3c3cd2ca
+/Transpose_24_output_0: 3c3cd2ca
+/Reshape_16_output_0: 3c3cd2ca
+(Unnamed Layer* 953) [Constant]_output: 3abc6dee
+/proj_8/Transpose_output_0: 3abc6dee
+(Unnamed Layer* 955) [Shuffle]_output: 3abc6dee
+/proj_8/MatMul_output_0: 3c628360
+(Unnamed Layer* 957) [Constant]_output: 3b2f9769
+(Unnamed Layer* 958) [Shuffle]_output: 3b2f9769
+/proj_8/Add_output_0: 3d246daf
+/Add_14_output_0: 3e2cad58
+/norm2_7/ReduceMean_output_0: 3a74e91e
+/norm2_7/Sub_output_0: 3e2ee4c2
+(Unnamed Layer* 964) [Shuffle]_output: 3c810a14
+/norm2_7/Pow_output_0: 3f5e48e2
+/norm2_7/ReduceMean_1_output_0: 3ceed191
+(Unnamed Layer* 968) [Shuffle]_output: 32074ebd
+/norm2_7/Add_output_0: 3ceed195
+/norm2_7/Sqrt_output_0: 3c78c9bf
+/norm2_7/Div_output_0: 3e075d56
+(Unnamed Layer* 972) [Constant]_output: 3c66a963
+(Unnamed Layer* 973) [Shuffle]_output: 3c66a963
+/norm2_7/Mul_output_0: 3dc335f7
+(Unnamed Layer* 975) [Constant]_output: 3ba973e7
+(Unnamed Layer* 976) [Shuffle]_output: 3ba973e7
+/norm2_7/Add_1_output_0: 3dd2d609
+(Unnamed Layer* 978) [Constant]_output: 3aad20b6
+/mlp/fc1_7/Transpose_output_0: 3aad20b6
+(Unnamed Layer* 980) [Shuffle]_output: 3aad20b6
+/mlp/fc1_7/MatMul_output_0: 3d703a2b
+(Unnamed Layer* 982) [Constant]_output: 3c2f18d4
+(Unnamed Layer* 983) [Shuffle]_output: 3c2f18d4
+/mlp/fc1_7/Add_output_0: 3d78fa6e
+(Unnamed Layer* 986) [Shuffle]_output: 3c367d3d
+/mlp/act_7/Div_output_0: 3d300de1
+/mlp/act_7/Erf_output_0: 3c010a14
+(Unnamed Layer* 990) [Shuffle]_output: 3c010a14
+/mlp/act_7/Add_output_0: 3c80d0b5
+/mlp/act_7/Mul_output_0: 3cbe7c4b
+(Unnamed Layer* 994) [Shuffle]_output: 3b810a14
+/mlp/act_7/Mul_1_output_0: 3c3e7c4b
+(Unnamed Layer* 996) [Constant]_output: 3ae7032d
+/mlp/fc2_7/Transpose_output_0: 3ae7032d
+(Unnamed Layer* 998) [Shuffle]_output: 3ae7032d
+/mlp/fc2_7/MatMul_output_0: 3d8e889a
+(Unnamed Layer* 1000) [Constant]_output: 3b16538e
+(Unnamed Layer* 1001) [Shuffle]_output: 3b16538e
+/mlp/fc2_7/Add_output_0: 3d20f519
+/Add_15_output_0: 3e2f11fe
+/norm/ReduceMean_output_0: 3a7580f2
+/norm/Sub_output_0: 3e2f7589
+(Unnamed Layer* 1007) [Shuffle]_output: 3c810a14
+/norm/Pow_output_0: 3f595962
+/norm/ReduceMean_1_output_0: 3d00b059
+(Unnamed Layer* 1011) [Shuffle]_output: 32074ebd
+/norm/Add_output_0: 3d00b05c
+/norm/Sqrt_output_0: 3c83a1d2
+/norm/Div_output_0: 3e01d3cc
+(Unnamed Layer* 1015) [Constant]_output: 3cb2a80a
+(Unnamed Layer* 1016) [Shuffle]_output: 3cb2a80a
+/norm/Mul_output_0: 3e145ded
+(Unnamed Layer* 1018) [Constant]_output: 3bbebc94
+(Unnamed Layer* 1019) [Shuffle]_output: 3bbebc94
+features: 3e126b96

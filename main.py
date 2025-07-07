@@ -1,3 +1,9 @@
+import multiprocessing as mp
+
+try:
+    mp.set_start_method("fork", force=True)  # ¨P( fork
+except RuntimeError:
+    pass  # !ĞLö2b¥
 import argparse
 import datetime
 import pathlib
@@ -28,6 +34,9 @@ from mast3r_slam.profiler import profiler
 import queue
 
 from optimized_mast3r_loader import load_optimized_mast3r
+
+
+
 
 def relocalization(frame, keyframes, factor_graph, retrieval_database):
     # we are adding and then removing from the keyframe, so we need to be careful.
@@ -150,13 +159,13 @@ def run_backend(cfg, model, states, keyframes, K, q):
                 idx = states.global_optimizer_tasks.pop(0)
 
     backend_stats = profiler.get_stats()
-    #q.put(("ba_stats", backend_stats))      # æŠŠè®¡æ—¶æ•°æ®å¡å›é˜Ÿåˆ—
+    #q.put(("ba_stats", backend_stats))      # Š¡öpn^Ş
     #q.put(backend_stats)
-    print("[BACKEND] send stats, iter =", idx)   # è°ƒè¯•ç”¨
+    print("[BACKEND] send stats, iter =", idx)   # Õ(
     q.put(backend_stats) 
 
 if __name__ == "__main__":
-    mp.set_start_method("spawn")
+    #mp.set_start_method("spawn")
     torch.backends.cuda.matmul.allow_tf32 = True
     torch.set_grad_enabled(False)
     device = "cuda:0"
@@ -180,7 +189,7 @@ if __name__ == "__main__":
     main2viz = new_queue(manager, args.no_viz)
     viz2main = new_queue(manager, args.no_viz)
 
-    backend2main = manager.Queue()        # â† æ–°å¢ï¼Œçº¯ç²¹çš„ multiprocessing.Queue
+    backend2main = manager.Queue()        #  °¯¹„ multiprocessing.Queue
 
     dataset = load_dataset(args.dataset)
     dataset.subsample(config["dataset"]["subsample"])
@@ -209,14 +218,25 @@ if __name__ == "__main__":
         viz.start()
 
     #model = load_mast3r(device=device)
-    #model = load_optimized_mast3r(device=device)
+    
+    # Õ(Ï!‹
     try:
-        from optimized_mast3r_loader import load_optimized_mast3r
-        model = load_optimized_mast3r(device=device)
-        print("âœ“ ä½¿ç”¨ä¼˜åŒ–æ¨¡å‹")
+        from simple_slam_integration import load_quantized_mast3r_simple
+        model = load_quantized_mast3r_simple("mast3r_encoder_int8.trt", device)
+        print("=€ TensorRTÏ!‹ò/( - „3.31x ")
     except Exception as e:
-        print(f"ä¼˜åŒ–æ¨¡å‹åŠ è½½å¤±è´¥ï¼Œä½¿ç”¨åŸå§‹æ¨¡å‹: {e}")
+        print(f"Ï!‹ }1%(ŸË!‹: {e}")
         model = load_mast3r(device=device)
+    
+  
+    #model = load_optimized_mast3r(device=device)
+    #try:
+    #    from optimized_mast3r_loader import load_optimized_mast3r
+    #    model = load_optimized_mast3r(device=device)
+    #    print(" (!‹")
+    #except Exception as e:
+    #    print(f"!‹ }1%(ŸË!‹: {e}")
+    #    model = load_mast3r(device=device)
     model.share_memory()
 
     has_calib = dataset.has_calib()
@@ -254,20 +274,20 @@ if __name__ == "__main__":
     frames = []
 
     while True:
-        # === æ”¶åç«¯ BA ç»Ÿè®¡ï¼ˆæ›¿æ¢åŸ msg2 å†™æ³•ï¼‰========
+        # === 6ï BA ß¡ÿbŸ msg2 ™Õ	========
         try:
             ba_stats = backend2main.get_nowait()
             print("[MAIN] got stats, total keys =", list(ba_stats.keys()))
-            #print("QUEUE RECV", msg["type"])     # è°ƒè¯•æ‰“å°
+            #print("QUEUE RECV", msg["type"])     # ÕSp
             profiler.merge_stats(ba_stats)
         except queue.Empty:
             pass
-        #print("QUEUE SIZE", backend2main.qsize())   # çœ‹çœ‹æœ‰æ²¡æœ‰ä¸œè¥¿æ»ç•™
+        #print("QUEUE SIZE", backend2main.qsize())   # 	¡	ŞY
 
         msg = try_get_msg(viz2main)
         last_msg = msg if msg is not None else last_msg
 
-        # è·å–å½“å‰è¿è¡Œæ¨¡å¼
+        # ·ÖSMĞL!
         mode = states.get_mode()
         
         if last_msg.is_terminated:
