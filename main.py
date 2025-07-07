@@ -1,9 +1,9 @@
 import multiprocessing as mp
 
 try:
-    mp.set_start_method("fork", force=True)  # �P( fork
+    mp.set_start_method("fork", force=True)  # 推荐用 fork
 except RuntimeError:
-    pass  # !�L�2b�
+    pass  # 多次运行时防止报错
 import argparse
 import datetime
 import pathlib
@@ -159,9 +159,9 @@ def run_backend(cfg, model, states, keyframes, K, q):
                 idx = states.global_optimizer_tasks.pop(0)
 
     backend_stats = profiler.get_stats()
-    #q.put(("ba_stats", backend_stats))      # ���pn^�
+    #q.put(("ba_stats", backend_stats))      # 把计时数据塞回队列
     #q.put(backend_stats)
-    print("[BACKEND] send stats, iter =", idx)   # �(
+    print("[BACKEND] send stats, iter =", idx)   # 调试用
     q.put(backend_stats) 
 
 if __name__ == "__main__":
@@ -189,7 +189,7 @@ if __name__ == "__main__":
     main2viz = new_queue(manager, args.no_viz)
     viz2main = new_queue(manager, args.no_viz)
 
-    backend2main = manager.Queue()        # � ����� multiprocessing.Queue
+    backend2main = manager.Queue()        # ← 新增，纯粹的 multiprocessing.Queue
 
     dataset = load_dataset(args.dataset)
     dataset.subsample(config["dataset"]["subsample"])
@@ -219,13 +219,13 @@ if __name__ == "__main__":
 
     #model = load_mast3r(device=device)
     
-    # �(�!�
+    # 尝试使用量化模型
     try:
         from simple_slam_integration import load_quantized_mast3r_simple
         model = load_quantized_mast3r_simple("mast3r_encoder_int8.trt", device)
-        print("=� TensorRT�!��/( - �3.31x�")
+        print("🚀 TensorRT量化模型已启用 - 预期3.31x编码加速")
     except Exception as e:
-        print(f"�!��}1%(��!�: {e}")
+        print(f"量化模型加载失败，使用原始模型: {e}")
         model = load_mast3r(device=device)
     
   
@@ -233,9 +233,9 @@ if __name__ == "__main__":
     #try:
     #    from optimized_mast3r_loader import load_optimized_mast3r
     #    model = load_optimized_mast3r(device=device)
-    #    print(" (!�")
+    #    print("✓ 使用优化模型")
     #except Exception as e:
-    #    print(f"!��}1%(��!�: {e}")
+    #    print(f"优化模型加载失败，使用原始模型: {e}")
     #    model = load_mast3r(device=device)
     model.share_memory()
 
@@ -274,20 +274,20 @@ if __name__ == "__main__":
     frames = []
 
     while True:
-        # === 6� BA ߡ�b� msg2 ��	========
+        # === 收后端 BA 统计（替换原 msg2 写法）========
         try:
             ba_stats = backend2main.get_nowait()
             print("[MAIN] got stats, total keys =", list(ba_stats.keys()))
-            #print("QUEUE RECV", msg["type"])     # �Sp
+            #print("QUEUE RECV", msg["type"])     # 调试打印
             profiler.merge_stats(ba_stats)
         except queue.Empty:
             pass
-        #print("QUEUE SIZE", backend2main.qsize())   # 	�	�Y
+        #print("QUEUE SIZE", backend2main.qsize())   # 看看有没有东西滞留
 
         msg = try_get_msg(viz2main)
         last_msg = msg if msg is not None else last_msg
 
-        # ��SM�L!
+        # 获取当前运行模式
         mode = states.get_mode()
         
         if last_msg.is_terminated:

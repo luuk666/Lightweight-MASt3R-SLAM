@@ -151,7 +151,7 @@ def quantize_with_tensorrt(onnx_path, calibration_data, precision="int8", output
     
     # 配置
     config = builder.create_builder_config()
-    config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 2 << 30)
+    config.max_workspace_size = 2 << 30  # 2GB
     
     # 设置精度
     if precision == "fp16":
