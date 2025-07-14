@@ -38,44 +38,77 @@ class TimeProfiler:
         print("\n" + "="*50)
         print("TIMING SUMMARY")
         print("="*50)
-        stats = self.get_stats()
-        
-        # ViT Inference
-        vit_total = stats.get('vit_encode', {}).get('total', 0) + \
-                    stats.get('decoder', {}).get('total', 0)
-        print(f"\nViT-Large Inference Total: {vit_total:.3f}s")
-        if 'vit_encode' in stats:
-            print(f"  - Encoding: {stats['vit_encode']['total']:.3f}s ({stats['vit_encode']['count']} calls)")
-        if 'decoder' in stats:
-            print(f"  - Decoding: {stats['decoder']['total']:.3f}s ({stats['decoder']['count']} calls)")
-        
-        # Attention vs MLP
-        if 'attention' in stats and 'mlp' in stats:
-            attn_time = stats['attention']['total']
-            mlp_time = stats['mlp']['total']
-            total_time = attn_time + mlp_time
-            print(f"\nAttention vs MLP:")
-            print(f"  - Attention: {attn_time:.3f}s ({attn_time/total_time*100:.1f}%)")
-            print(f"  - MLP: {mlp_time:.3f}s ({mlp_time/total_time*100:.1f}%)")
-        
-        # Backend BA
-        #ba_total = stats.get('ba_rays', {}).get('total', 0) + \
-        #           stats.get('ba_calib', {}).get('total', 0)
-        #print(f"\nBackend BA Total: {ba_total:.3f}s")
-        #if 'ba_rays' in stats:
-        #    print(f"  - Ray BA: {stats['ba_rays']['total']:.3f}s ({stats['ba_rays']['count']} calls)")
-        #if 'ba_calib' in stats:
-        #    print(f"  - Calib BA: {stats['ba_calib']['total']:.3f}s ({stats['ba_calib']['count']} calls)")
-        
-        #print("="*50 + "\n")
-            
-         
-         # ---------- 全部计时减去 ViT = “Backend BA+杂项” ----------
-        total_time = sum(rec['total'] for rec in stats.values())
-        ba_total   = total_time - vit_total
-        print(f"\nBackend BA+Other Total: {ba_total:.3f}s")
 
+        stats = self.get_stats()
+
+        # 个别组件时间和调用次数
+        t_patch = stats.get('PatchEmbed', {}).get('total', 0.0)
+        n_patch = stats.get('PatchEmbed', {}).get('count', 0)
+    
+        t_enc_attn = stats.get('Encoder_attn', {}).get('total', 0.0)
+        t_enc_mlp  = stats.get('Encoder_mlp', {}).get('total', 0.0)
+        n_enc = stats.get('Encoder_attn', {}).get('count', 0)
+    
+        t_dec_attn = stats.get('Decoder_attn', {}).get('total', 0.0)
+        t_dec_cross = stats.get('Decoder_cross_attn', {}).get('total', 0.0)
+        t_dec_mlp  = stats.get('Decoder_mlp', {}).get('total', 0.0)
+        n_dec = stats.get('Decoder_attn', {}).get('count', 0)
+        
+        ba_total = stats.get('ba_calib', {}).get('total', 0.0)
+
+        # 总计
+        t_enc_total = t_enc_attn + t_enc_mlp
+        t_dec_total = t_dec_attn + t_dec_cross + t_dec_mlp
+        vit_total = t_patch + t_enc_total + t_dec_total
+
+        print(f"\nViT-Large Inference Total: {vit_total:.3f}s")
+        if t_patch > 0:
+            print(f"  - PatchEmbed: {t_patch:.3f}s ({n_patch} calls)")
+        if t_enc_attn > 0:
+            print(f"  - Encoder_Attn: {t_enc_attn:.3f}s ({n_enc} calls)")
+        if t_enc_mlp > 0:
+            print(f"  - Encoder_MLP: {t_enc_mlp:.3f}s ({n_enc} calls)")
+        if t_dec_attn > 0:
+            print(f"  - Decoder_Attn: {t_dec_attn:.3f}s ({n_dec} calls)")
+        if t_dec_cross > 0:
+            print(f"  - Decoder_CrossAttn: {t_dec_cross:.3f}s ({n_dec} calls)")
+        if t_dec_mlp > 0:
+            print(f"  - Decoder_MLP: {t_dec_mlp:.3f}s ({n_dec} calls)")
+
+        # Encoder vs Decoder 总对比
+        total_enc_dec = t_enc_total + t_dec_total
+        if total_enc_dec > 0:
+            pct_enc = (t_enc_total / total_enc_dec) * 100
+            pct_dec = (t_dec_total / total_enc_dec) * 100
+            print(f"\nEncoder vs Decoder:")
+            print(f"  - Encoder Total: {t_enc_total:.3f}s ({pct_enc:.1f}%)")
+            print(f"  - Decoder Total: {t_dec_total:.3f}s ({pct_dec:.1f}%)")
+
+        # Encoder 内部细分
+        if t_enc_total > 0:
+            enc_attn_pct = (t_enc_attn / t_enc_total) * 100
+            enc_mlp_pct  = (t_enc_mlp  / t_enc_total) * 100
+            print(f"\nEncoder Internal Breakdown:")
+            print(f"  - Attention: {t_enc_attn:.3f}s ({enc_attn_pct:.1f}%)")
+            print(f"  - MLP: {t_enc_mlp:.3f}s ({enc_mlp_pct:.1f}%)")
+
+        # Decoder 内部细分
+        if t_dec_total > 0:
+            dec_attn_pct  = (t_dec_attn / t_dec_total) * 100
+            dec_cross_pct = (t_dec_cross / t_dec_total) * 100
+            dec_mlp_pct   = (t_dec_mlp / t_dec_total) * 100
+            print(f"\nDecoder Internal Breakdown:")
+            print(f"  - Self-Attention: {t_dec_attn:.3f}s ({dec_attn_pct:.1f}%)")
+            print(f"  - Cross-Attention: {t_dec_cross:.3f}s ({dec_cross_pct:.1f}%)")
+            print(f"  - MLP: {t_dec_mlp:.3f}s ({dec_mlp_pct:.1f}%)")
+
+        # BA + 其他（总 profiled 时间 - vit 相关）
+        total_profiled = sum(v['total'] for v in stats.values())
+        #ba_total = total_profiled - vit_total
+        print(f"\nBackend Total (ba_calib only): {ba_total:.3f}s")
+        print("All profiler keys:", list(stats.keys()))
         print("="*50 + "\n")
+
         
 
 

@@ -127,9 +127,9 @@ class Block(nn.Module):
         self.mlp = Mlp(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop)
 
     def forward(self, x, xpos):
-        with profiler.timer('attention'):
+        with profiler.timer('Encoder_attn'):
             x = x + self.drop_path(self.attn(self.norm1(x), xpos))
-        with profiler.timer('mlp'):
+        with profiler.timer('Encoder_mlp'):
             x = x + self.drop_path(self.mlp(self.norm2(x)))
         return x
 
@@ -188,12 +188,12 @@ class DecoderBlock(nn.Module):
         self.norm_y = norm_layer(dim) if norm_mem else nn.Identity()
 
     def forward(self, x, y, xpos, ypos):
-        with profiler.timer('attn'):
+        with profiler.timer('Decoder_attn'):
             x = x + self.drop_path(self.attn(self.norm1(x), xpos))
-        with profiler.timer('cross_attn'):
+        with profiler.timer('Decoder_cross_attn'):
             y_ = self.norm_y(y)
             x = x + self.drop_path(self.cross_attn(self.norm2(x), y_, y_, xpos, ypos))
-        with profiler.timer('mlp'):
+        with profiler.timer('Decoder_mlp'):
             x = x + self.drop_path(self.mlp(self.norm3(x)))
         return x, y
         
@@ -232,17 +232,17 @@ class PatchEmbed(nn.Module):
         self.position_getter = PositionGetter()
         
     def forward(self, x):
-        B, C, H, W = x.shape
-        torch._assert(H == self.img_size[0], f"Input image height ({H}) doesn't match model ({self.img_size[0]}).")
-        torch._assert(W == self.img_size[1], f"Input image width ({W}) doesn't match model ({self.img_size[1]}).")
-        x = self.proj(x)
-        pos = self.position_getter(B, x.size(2), x.size(3), x.device)
-        if self.flatten:
-            x = x.flatten(2).transpose(1, 2)  # BCHW -> BNC
-        x = self.norm(x)
-        return x, pos
+        with profiler.timer('PatchEmbed'):
+            B, C, H, W = x.shape
+            torch._assert(H == self.img_size[0], f"Input image height ({H}) doesn't match model ({self.img_size[0]}).")
+            torch._assert(W == self.img_size[1], f"Input image width ({W}) doesn't match model ({self.img_size[1]}).")
+            x = self.proj(x)
+            pos = self.position_getter(B, x.size(2), x.size(3), x.device)
+            if self.flatten:
+                x = x.flatten(2).transpose(1, 2)  # BCHW -> BNC
+            x = self.norm(x)
+            return x, pos
         
     def _init_weights(self):
         w = self.proj.weight.data
         torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1])) 
-

@@ -9,7 +9,7 @@ from mast3r_slam.mast3r_utils import mast3r_match_symmetric
 import mast3r_slam_backends
 
 from mast3r_slam.profiler import profiler
-
+import time
 
 class FactorGraph:
     def __init__(self, model, frames: SharedKeyframes, K=None, device="cuda"):
@@ -161,14 +161,19 @@ class FactorGraph:
             self.frames.update_T_WCs(T_WCs[pin:], unique_kf_idx[pin:])
 
     def solve_GN_calib(self):
+        #print(">>> solve_GN_calib() called!")
+        
+        start = time.time()
         with profiler.timer('ba_calib'):
             K = self.K
             pin = self.cfg["pin"]
             unique_kf_idx = self.get_unique_kf_idx()
-            #print("unique_kf =", unique_kf_idx.numel(), "pin =", pin)
+            
+            #print("unique_kf =", n_unique_kf.item(), "pin =", pin)
 
             n_unique_kf = unique_kf_idx.numel()
             if n_unique_kf <= pin:
+                print(">>> Early exit from solve_GN_calib (not enough keyframes)")
                 return
 
             Xs, T_WCs, Cs = self.get_poses_points(unique_kf_idx)
@@ -217,3 +222,7 @@ class FactorGraph:
 
             # Update the keyframe T_WC
             self.frames.update_T_WCs(T_WCs[pin:], unique_kf_idx[pin:])
+        duration = time.time() - start
+        print(f"⏱ BA_calib this round took {duration:.3f}s")
+
+            

@@ -1,9 +1,9 @@
-import multiprocessing as mp
+#import multiprocessing as mp
 
-try:
-    mp.set_start_method("fork", force=True)  # 推荐用 fork
-except RuntimeError:
-    pass  # 多次运行时防止报错
+#try:
+#    mp.set_start_method("fork", force=True)  # 推荐用 fork
+#except RuntimeError:
+#    pass  # 多次运行时防止报错
 import argparse
 import datetime
 import pathlib
@@ -33,7 +33,7 @@ import torch.multiprocessing as mp
 from mast3r_slam.profiler import profiler
 import queue
 
-from optimized_mast3r_loader import load_optimized_mast3r
+#from optimized_mast3r_loader import load_optimized_mast3r
 
 
 
@@ -84,7 +84,7 @@ def relocalization(frame, keyframes, factor_graph, retrieval_database):
         return successful_loop_closure
 
 
-def run_backend(cfg, model, states, keyframes, K, q):
+def run_backend(cfg, model, states, keyframes, K, q=None):
     set_global_config(cfg)
 
     device = keyframes.device
@@ -162,10 +162,10 @@ def run_backend(cfg, model, states, keyframes, K, q):
     #q.put(("ba_stats", backend_stats))      # 把计时数据塞回队列
     #q.put(backend_stats)
     print("[BACKEND] send stats, iter =", idx)   # 调试用
-    q.put(backend_stats) 
+    #q.put(backend_stats) 
 
 if __name__ == "__main__":
-    #mp.set_start_method("spawn")
+    mp.set_start_method("spawn")
     torch.backends.cuda.matmul.allow_tf32 = True
     torch.set_grad_enabled(False)
     device = "cuda:0"
@@ -189,7 +189,7 @@ if __name__ == "__main__":
     main2viz = new_queue(manager, args.no_viz)
     viz2main = new_queue(manager, args.no_viz)
 
-    backend2main = manager.Queue()        # ← 新增，纯粹的 multiprocessing.Queue
+    #backend2main = manager.Queue()        # ← 新增，纯粹的 multiprocessing.Queue
 
     dataset = load_dataset(args.dataset)
     dataset.subsample(config["dataset"]["subsample"])
@@ -217,16 +217,16 @@ if __name__ == "__main__":
         )
         viz.start()
 
-    #model = load_mast3r(device=device)
+    model = load_mast3r(device=device)
     
     # 尝试使用量化模型
-    try:
-        from simple_slam_integration import load_quantized_mast3r_simple
-        model = load_quantized_mast3r_simple("mast3r_encoder_int8.trt", device)
-        print("🚀 TensorRT量化模型已启用 - 预期3.31x编码加速")
-    except Exception as e:
-        print(f"量化模型加载失败，使用原始模型: {e}")
-        model = load_mast3r(device=device)
+    #try:
+    #    from simple_slam_integration import load_quantized_mast3r_simple
+    #    model = load_quantized_mast3r_simple("mast3r_encoder_int8.trt", device)
+    #    print("🚀 TensorRT量化模型已启用 - 预期3.31x编码加速")
+    #except Exception as e:
+    #    print(f"量化模型加载失败，使用原始模型: {e}")
+    #    model = load_mast3r(device=device)
     
   
     #model = load_optimized_mast3r(device=device)
@@ -265,7 +265,7 @@ if __name__ == "__main__":
     tracker = FrameTracker(model, keyframes, device)
     last_msg = WindowMsg()
 
-    backend = mp.Process(target=run_backend, args=(config, model, states, keyframes, K, backend2main))
+    backend = mp.Process(target=run_backend, args=(config, model, states, keyframes, K))
     backend.start()
 
     i = 0
@@ -275,17 +275,17 @@ if __name__ == "__main__":
 
     while True:
         # === 收后端 BA 统计（替换原 msg2 写法）========
-        try:
-            ba_stats = backend2main.get_nowait()
-            print("[MAIN] got stats, total keys =", list(ba_stats.keys()))
-            #print("QUEUE RECV", msg["type"])     # 调试打印
-            profiler.merge_stats(ba_stats)
-        except queue.Empty:
-            pass
+        #try:
+        #    ba_stats = backend2main.get_nowait()
+        #    print("[MAIN] got stats, total keys =", list(ba_stats.keys()))
+        #    #print("QUEUE RECV", msg["type"])     # 调试打印
+        #    profiler.merge_stats(ba_stats)
+        #except queue.Empty:
+        #    pass
         #print("QUEUE SIZE", backend2main.qsize())   # 看看有没有东西滞留
 
-        msg = try_get_msg(viz2main)
-        last_msg = msg if msg is not None else last_msg
+        #msg = try_get_msg(viz2main)
+        #last_msg = msg if msg is not None else last_msg
 
         # 获取当前运行模式
         mode = states.get_mode()
@@ -386,12 +386,11 @@ if __name__ == "__main__":
             cv2.imwrite(f"{savedir}/{i}.png", frame)
     
     
-    backend.join()  
+    #backend.join()  
     if not args.no_viz:
         viz.join()    
               
     profiler.print_summary()
 
     print("done")
-
 
